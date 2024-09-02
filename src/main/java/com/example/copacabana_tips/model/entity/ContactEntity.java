@@ -14,11 +14,15 @@ public class ContactEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @Column(name = "deleted", nullable = false)
+    private Boolean deleted = false;
 }

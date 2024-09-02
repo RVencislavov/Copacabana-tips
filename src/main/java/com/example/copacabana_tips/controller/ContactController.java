@@ -5,10 +5,7 @@ import com.example.copacabana_tips.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -39,5 +36,19 @@ public class ContactController {
         model.addAttribute("contacts", contacts);
         model.addAttribute("thresholdDate", thresholdDate);
         return "all-contacts";
+    }
+    @PostMapping("/delete/{id}")
+    public String deleteContact(@PathVariable Long id, Model model) {
+        try {
+            contactService.deleteContact(id);
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            List<ContactDto> contacts = contactService.getAllContacts();
+            LocalDate thresholdDate = LocalDate.now().minusDays(30);
+            model.addAttribute("contacts", contacts);
+            model.addAttribute("thresholdDate", thresholdDate);
+            return "all-contacts";
+        }
+        return "redirect:/contacts/all";
     }
 }
