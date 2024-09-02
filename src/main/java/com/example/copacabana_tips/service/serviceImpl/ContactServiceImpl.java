@@ -28,10 +28,23 @@ public class ContactServiceImpl implements ContactService {
     }
     @Override
     public List<ContactDto> getAllContacts() {
-        List<ContactEntity> contactEntities = contactRepository.findAll();
+        List<ContactEntity> contactEntities = contactRepository.findByDeletedFalse();
         return contactEntities.stream()
                 .map(contactMapper::toDto)
                 .toList();
+    }
+    @Override
+    public void deleteContact(Long id) {
+        ContactEntity contact = contactRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contact not found"));
+
+        LocalDateTime thresholdDateTime = LocalDateTime.now().minusDays(30);
+        if (contact.getCreatedDate().isAfter(thresholdDateTime)) {
+            throw new RuntimeException("Cannot delete a contact created within the last 30 days.");
+        }
+
+        contact.setDeleted(true);
+        contactRepository.save(contact);
     }
 }
 

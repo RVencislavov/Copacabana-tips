@@ -8,4 +8,5 @@ public interface ContactService {
     public ContactDto addContact(ContactDto contactDto);
 
     List<ContactDto> getAllContacts();
+    public void deleteContact(Long id);
 }

@@ -14,6 +14,11 @@
 </head>
 <body>
 <h1>All Contacts</h1>
+
+<div th:if="${errorMessage}" style="color: red; font-weight: bold;">
+    <p th:text="${errorMessage}"></p>
+</div>
+
 <table>
     <thead>
     <tr>
@@ -21,6 +26,7 @@
         <th>Name</th>
         <th>Phone Number</th>
         <th>Created Date</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -30,6 +36,13 @@
         <td th:text="${contact.name}"></td>
         <td th:text="${contact.phoneNumber}"></td>
         <td th:text="${contact.createdDate}"></td>
+        <td>
+            <form th:action="@{/contacts/delete/{id}(id=${contact.id})}" method="post" style="display:inline;">
+                <button type="submit" style="background:none;border:none;color:red;cursor:pointer;">
+                    &#128465; <!-- Trash can emoji -->
+                </button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
