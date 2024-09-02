@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Copacabana Tips API
+  description: API for managing contacts in Copacabana Tips application.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /contacts/add:
+    get:
+      summary: Show add contact form
+      operationId: showAddContactForm
+      tags:
+        - Contacts
+      responses:
+        '200':
+          description: Returns the add contact form
+          content:
+            text/html:
+              schema:
+                type: string
+    post:
+      summary: Add a new contact
+      operationId: addContact
+      tags:
+        - Contacts
+      requestBody:
+        description: Contact object that needs to be added
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactDto'
+      responses:
+        '302':
+          description: Redirects to the all contacts page after adding a contact
+        '400':
+          description: Invalid contact data provided
+  /contacts/all:
+    get:
+      summary: Get all contacts
+      operationId: getAllContacts
+      tags:
+        - Contacts
+      responses:
+        '200':
+          description: Returns a list of all contacts
+          content:
+            text/html:
+              schema:
+                type: string
+  /contacts/delete/{id}:
+    post:
+      summary: Delete a contact
+      operationId: deleteContact
+      tags:
+        - Contacts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the contact to be deleted
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '302':
+          description: Redirects to the all contacts page after deleting a contact
+        '400':
+          description: Invalid contact ID provided or contact cannot be deleted
+        '404':
+          description: Contact not found
+
+components:
+  schemas:
+    ContactDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+        createdDate:
+          type: string
+          format: date-time
